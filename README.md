@@ -100,6 +100,12 @@ No basta con que exista la tabla `audit_logs`; la auditoría debe quedar integra
 - Mejorar y ampliar pruebas automatizadas.
 - Documentar decisiones técnicas y cambios realizados.
 
+## Criterio importante
+
+No es obligatorio resolver todo. Prioriza los problemas con mayor impacto operativo y explica qué dejaste pendiente y por qué.
+
+Valoramos más una solución pequeña, segura y bien explicada que muchos cambios apresurados sin claridad.
+
 ## Entregable esperado
 
 - Código actualizado con fixes incrementales.
