@@ -70,6 +70,29 @@ npm test
   - body: `{ "eventId": string, "folio": string, "amount": number, "paidAt": string }`
 - `GET /api/reports/daily-cash?date=YYYY-MM-DD`
 
+## Requerimiento nuevo: auditoría de cambios de estado
+
+El candidato debe completar o implementar auditoría básica de cambios relevantes de estado en el flujo de negocio.
+
+Cada cambio relevante debe registrar:
+
+- `order_id`
+- `previous_status`
+- `new_status`
+- `source`: `manual`, `webhook` o `system`
+- `external_reference`, cuando aplique
+- `created_at`
+
+No basta con que exista la tabla `audit_logs`; la auditoría debe quedar integrada al flujo de negocio, de modo que cualquier transición de estado quede registrada automáticamente.
+
+## Problemas reportados por soporte
+
+- Algunas órdenes canceladas aparecen como pagadas.
+- Algunos webhooks de pago parecen procesarse más de una vez.
+- El reporte diario de recaudo no siempre cuadra.
+- Algunas consultas de órdenes fallan con datos incompletos.
+- Algunos filtros combinados no devuelven los resultados esperados.
+
 ## Tareas del candidato
 
 - Identificar y reproducir los incidentes reportados.

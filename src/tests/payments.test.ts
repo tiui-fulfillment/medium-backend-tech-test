@@ -27,4 +27,7 @@ describe('payments API', () => {
     expect(response.status).toBe(202);
     expect(response.body.applied).toBe(true);
   });
+
+  it.todo('does not process the same webhook event twice');
+  it.todo('does not apply payment to cancelled orders from webhook');
 });
