@@ -33,4 +33,8 @@ describe('orders API', () => {
     expect(response.status).toBe(200);
     expect(response.body.paid_amount).toBe(100);
   });
+
+  it.todo('does not allow paying a cancelled order');
+  it.todo('handles orders with null recipient_name');
+  it.todo('applies status filter correctly when combined with date filters');
 });

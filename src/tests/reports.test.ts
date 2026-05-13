@@ -24,4 +24,7 @@ describe('reports API', () => {
     expect(response.body).toHaveProperty('date', date);
     expect(response.body).toHaveProperty('totalCash');
   });
+
+  it.todo('does not include cancelled orders in daily cash report');
+  it.todo('returns the expected total cash for a known seeded date');
 });
