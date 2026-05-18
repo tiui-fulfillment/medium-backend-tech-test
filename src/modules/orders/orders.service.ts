@@ -26,6 +26,10 @@ export async function payOrderService(id: number, amount: number, source: string
     throw new Error('Order is already paid');
   }
 
+  if (order.status === 'cancelled') {
+    throw new Error('Cannot pay a cancelled order');
+  }
+
   const nextPaidAmount = order.paid_amount + amount;
   const shouldMarkAsPaid = nextPaidAmount >= order.total_amount;
   const nextStatus = shouldMarkAsPaid ? 'paid' : undefined;

@@ -8,6 +8,14 @@ export async function processPaycashWebhook(payload: {
   amount: number;
   paidAt: string;
 }) {
+  const existing = await pool.query(
+    `SELECT id FROM payment_webhook_logs WHERE provider = 'paycash' AND provider_event_id = $1`,
+    [payload.eventId]
+  );
+  if (existing.rows.length > 0) {
+    return { applied: false, reason: 'Duplicate event' };
+  }
+
   await pool.query(
     `INSERT INTO payment_webhook_logs (provider, provider_event_id, folio, amount, payload)
      VALUES ($1, $2, $3, $4, $5::jsonb)`,
@@ -17,6 +25,10 @@ export async function processPaycashWebhook(payload: {
   const order = await getOrderByFolio(payload.folio);
   if (!order) {
     return { applied: false, reason: 'Order not found' };
+  }
+
+  if (order.status === 'cancelled') {
+    return { applied: false, reason: 'Order is cancelled' };
   }
 
   const nextPaidAmount = order.paid_amount + payload.amount;

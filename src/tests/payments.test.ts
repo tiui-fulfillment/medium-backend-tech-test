@@ -28,6 +28,34 @@ describe('payments API', () => {
     expect(response.body.applied).toBe(true);
   });
 
-  it.todo('does not process the same webhook event twice');
-  it.todo('does not apply payment to cancelled orders from webhook');
+  it('does not process the same webhook event twice', async () => {
+    const payload = {
+      eventId: 'evt-idempotent-test',
+      folio: 'ORD-1007',
+      amount: 100,
+      paidAt: new Date().toISOString(),
+    };
+
+    const first = await request(app).post('/api/webhooks/paycash').send(payload);
+    expect(first.status).toBe(202);
+    expect(first.body.applied).toBe(true);
+
+    const second = await request(app).post('/api/webhooks/paycash').send(payload);
+    expect(second.status).toBe(202);
+    expect(second.body.applied).toBe(false);
+    expect(second.body.reason).toBe('Duplicate event');
+  });
+
+  it('does not apply payment to cancelled orders from webhook', async () => {
+    const response = await request(app).post('/api/webhooks/paycash').send({
+      eventId: 'evt-cancelled-test',
+      folio: 'ORD-1004',
+      amount: 300,
+      paidAt: new Date().toISOString(),
+    });
+
+    expect(response.status).toBe(202);
+    expect(response.body.applied).toBe(false);
+    expect(response.body.reason).toBe('Order is cancelled');
+  });
 });

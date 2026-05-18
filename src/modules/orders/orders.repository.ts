@@ -15,7 +15,7 @@ export type Order = {
 const mapRowToOrder = (row: any): Order => ({
   id: row.id,
   folio: row.folio,
-  recipient_name: row.recipient_name.trim(),
+  recipient_name: row.recipient_name?.trim() ?? null,
   status: row.status,
   total_amount: Number(row.total_amount),
   paid_amount: Number(row.paid_amount),
@@ -34,7 +34,7 @@ export async function listOrders(filters: {
   const where: string[] = [];
   const values: Array<string | number> = [];
 
-  if (filters.status && !filters.from && !filters.to) {
+  if (filters.status) {
     values.push(filters.status);
     where.push(`status = $${values.length}`);
   }
